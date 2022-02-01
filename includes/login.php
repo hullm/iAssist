@@ -5,6 +5,7 @@
         <div class="card mx-auto rounded-10">    
             <div class="card-header text-white bg-primary">
                 <h2 class="card-title text-center"><?php echo str_replace("'","\'",$config['title']); ?> Login</h2>
+                <!-- <h2 class="card-title text-center"><img src="images/icon.png"  height="40" class="d-inline-block align-top" alt=""> Login</h2> -->
             </div>
             <div class="card-body">
                 <!-- Login Form -->

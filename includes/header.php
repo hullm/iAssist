@@ -52,8 +52,8 @@ else {
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="images/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            <strong><?php echo str_replace("'","\'",$config['title']); ?></strong>
+            <img src="images/icon.png"  height="50" class="d-inline-block align-top" alt="">
+            <!-- <strong><?php echo str_replace("'","\'",$config['title']); ?></strong> -->
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
