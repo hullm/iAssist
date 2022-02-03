@@ -49,7 +49,7 @@ else {
 <body id="main">
 
 <!-- Navigation bar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img src="images/logo.png"  height="35" class="d-inline-block align-top" alt="">
