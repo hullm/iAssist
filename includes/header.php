@@ -41,48 +41,12 @@ else {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/sidebars.css">
+    <script src="/assets/sidebars.js"></script>
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <head>
 
 <body id="main">
-
-<!-- Navigation bar -->
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="images/logo.png"  height="35" class="d-inline-block align-top" alt="">
-            <!-- <strong><?php echo str_replace("'","\'",$config['title']); ?></strong> -->
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <?php   if ($loggedIn == "True") { ?>
-                <li class="nav-item">
-                    <a class="nav-link <?php echo $navHomeActive;?>" href="index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?php echo $navStatsActive;?>" href="index.php?stats">Stats</a>
-                </li>
-        <?php   } ?>
-            </ul>
-        <?php if ($loggedIn == "True") { ?>
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-                <li class="nav-ite dropdown">
-                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-fill"></i> &nbsp;<?php echo $_SESSION["firstName"]. " ". $_SESSION["lastName"]; ?>
-                    </a>
-                    <ul class="dropdown-menu navbar-dark bg-primary" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="nav-link dropdown-item active" href="index.php?logout">Logout</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        <?php   } ?>
-        </div>
-    </div>
-</nav>
