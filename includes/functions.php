@@ -51,6 +51,86 @@ function getActiveDeviceCount() {
     }
 }
 
+function getStudentsPerGrade(){
+    $studentGradeArray = ["2022" => 67,
+    "2023" => 56,
+    "2024" => 63,
+    "2025" => 51,
+    "2026" => 93,
+    "2027" => 43,
+    "2028" => 53,
+    "2029" => 42,
+    "2030" => 46,
+    "2031" => 34,
+    "2032" => 59,
+    "2033" => 99,
+    "2034" => 13];
+    return $studentGradeArray;
+}
+
+function getGrade($year){
+    $todayYear = date("Y");
+    $todayMonth = date("m");
+    $year = substr($year, -4);
+    $classOf='';
+    if ($todayMonth >= 7 && $todayMonth <= 12){
+      $todayYear++;
+    }
+    $grade = 12 - ($year - $todayYear);
+    if ($grade == 0){
+      $classOf="Kindergarten";
+    }
+    elseif ($grade == 1){
+      $classOf=$grade."st";
+    }
+    elseif ($grade == 2){
+      $classOf=$grade."nd";
+    }
+    elseif ($grade == 3){
+      $classOf=$grade."rd";
+    }
+    else{
+      $classOf=$grade."th";
+    }
+    return $classOf;
+  }
+ 
+ function reverseGetGrade($grade){
+    $todayYear = date("Y");
+    $todayMonth = date("m");
+    $todayDay = date("d");
+    if ($todayMonth >= 7 && $todayMonth <=12){
+      $todayYear++;
+    }
+    if ($grade == "12th Grade"){
+       return ($todayYear-1)."-".$todayYear;
+    }else if ($grade == "11th Grade"){
+       return $todayYear."-".($todayYear+1);
+    } else if ($grade == "10th Grade"){
+       return ($todayYear+1)."-".($todayYear+2);
+    } else if ($grade == "9th Grade"){
+       return ($todayYear+2)."-".($todayYear+3);
+    } else if ($grade == "8th Grade"){
+       return ($todayYear+3)."-".($todayYear+4);
+    } else if ($grade == "7th Grade"){
+       return ($todayYear+4)."-".($todayYear+5);
+    } else if ($grade == "6th Grade"){
+       return ($todayYear+5)."-".($todayYear+6);
+    } else if ($grade == "5th Grade"){
+       return ($todayYear+6)."-".($todayYear+7);
+    } else if ($grade == "4th Grade"){
+       return ($todayYear+7)."-".($todayYear+8);
+    } else if ($grade == "3rd Grade"){
+       return ($todayYear+8)."-".($todayYear+9);
+    } else if ($grade == "2nd Grade"){
+       return ($todayYear+9)."-".($todayYear+10);
+    } else if ($grade == "1st Grade"){
+       return ($todayYear+10)."-".($todayYear+11);
+    } else if ($grade == "Kindergarten"){
+       return ($todayYear+11)."-".($todayYear+12);
+    }
+ }
+
 function getActivePeopleCount() {
 
     // This will return the number of active people in the database

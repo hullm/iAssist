@@ -4,6 +4,7 @@ include 'includes/functions.php';
 include 'includes/submit.php';
 include 'includes/header.php';
 include 'includes/footer.php';
+include 'includes/symbols.php';
 
 // Show the login page
 if(isset($_GET['login'])) {
