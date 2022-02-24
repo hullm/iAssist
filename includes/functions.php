@@ -52,19 +52,40 @@ function getActiveDeviceCount() {
 }
 
 function getStudentsPerGrade(){
-    $studentGradeArray = ["2022" => 67,
-    "2023" => 56,
-    "2024" => 63,
-    "2025" => 51,
-    "2026" => 93,
-    "2027" => 43,
-    "2028" => 53,
-    "2029" => 42,
-    "2030" => 46,
-    "2031" => 34,
-    "2032" => 59,
-    "2033" => 99,
-    "2034" => 13];
+    // $studentGradeArray = ["2022" => 67,
+    // "2023" => 56,
+    // "2024" => 63,
+    // "2025" => 51,
+    // "2026" => 93,
+    // "2027" => 43,
+    // "2028" => 53,
+    // "2029" => 42,
+    // "2030" => 46,
+    // "2031" => 34,
+    // "2032" => 59,
+    // "2033" => 99,
+    // "2034" => 13];
+
+    // Initialize variables
+    $studentGradeArray = [];
+
+    // Connect to the database
+    $connection = db_connect();
+
+    // Get the count of students per grade
+    $sql = "SELECT Role,Count(ID) AS CountOfStudents FROM People WHERE Role>=2000 AND Active GROUP BY Role;";
+    $results = $connection->query($sql);
+
+    // Return the data if found, otherwise return 0
+    if ($results->num_rows > 0) {
+        
+        // Loop through the returned records from the old database
+        while ($row=$results->fetch_assoc()) {
+            $studentGradeArray += [strval($row['Role']) => $row['CountOfStudents']];
+        }
+
+    } 
+
     return $studentGradeArray;
 }
 
