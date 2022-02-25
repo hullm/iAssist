@@ -93,7 +93,7 @@ $sql = "CREATE TABLE `People` (
     `Deleted` TINYINT(1) DEFAULT 0,
     PRIMARY KEY (`ID`), 
     INDEX (`UserName`)
-  ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
 
 if ($connection->query($sql) === TRUE) {
     echo "<div>People table created...</div>";
@@ -116,7 +116,7 @@ $sql = "CREATE TABLE `Assignments` (
     `DateDeleted` DATETIME,
     `Deleted` TINYINT(1),
     PRIMARY KEY (`ID`)
-  ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
 
 if ($connection->query($sql) === TRUE) {
     echo "<div>Assignments table created...</div>";
@@ -146,7 +146,7 @@ $sql = "CREATE TABLE `Tickets` (
     `Deleted` TINYINT(1), 
     INDEX (`ID`), 
     PRIMARY KEY (`ID`)
-  ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
 
 if ($connection->query($sql) === TRUE) {
     echo "<div>Tickets table created...</div>";
@@ -174,12 +174,28 @@ $sql = "CREATE TABLE `Events` (
     `DateDeleted` DATETIME,
     `Deleted` TINYINT(1), 
     PRIMARY KEY (`ID`)
-  ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
 
 if ($connection->query($sql) === TRUE) {
     echo "<div>Events table created...</div>";
 } else {
     echo "<div>Events table already exists...</div>";
 }
+
+// Create the Events table
+$sql = "CREATE TABLE `CountHistory` (
+    `ID` INTEGER NOT NULL AUTO_INCREMENT, 
+    `Role` INTEGER DEFAULT 0, 
+    `StudentCount` INTEGER, 
+    `RecordedDate` DATETIME, 
+    PRIMARY KEY (`ID`)
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+
+if ($connection->query($sql) === TRUE) {
+    echo "<div>CountHistory table created...</div>";
+} else {
+    echo "<div>CountHistory table already exists...</div>";
+}
+
 
 ?>
