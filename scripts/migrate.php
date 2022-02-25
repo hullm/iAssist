@@ -7,6 +7,7 @@ $config = parse_ini_file($configFile);
 importPeople();
 importDevices();
 importAssignments();
+importCountHistory();
 
 function db_connect() {
 
@@ -101,10 +102,10 @@ function importDevices(){
 
             // See if the record is already in the new database
             $sql = "SELECT * FROM Devices WHERE ID=".$row['ID'].";";
-            $deviceCheck = $iAssistDB->query($sql);
+            $dbCheck = $iAssistDB->query($sql);
 
             // Add the record if it's not found in the database
-            if ($deviceCheck->num_rows == 0) {
+            if ($dbCheck->num_rows == 0) {
 
                 // Create the devices's record in the database 
                 $sql = "INSERT INTO Devices(ID,DeviceTag,AltTag,DeviceType,Manufacturer,Model,SerialNumber,Active,Deleted)
@@ -122,7 +123,7 @@ function importDevices(){
 
                 // Get the newly created device
                 $sql = "SELECT * FROM Devices WHERE ID=".$row['ID'].";";
-                $deviceCheck = $iAssistDB->query($sql);
+                $dbCheck = $iAssistDB->query($sql);
             }
             else {
 
@@ -131,10 +132,10 @@ function importDevices(){
             }
 
             // Grab the info about the device
-            $existingDevice=$deviceCheck->fetch_assoc();
+            $existingEntry=$dbCheck->fetch_assoc();
 
             // Update DeviceTag
-            if ($row['LGTag'] != $existingDevice['DeviceTag']) {
+            if ($row['LGTag'] != $existingEntry['DeviceTag']) {
                 $sql = "UPDATE Devices SET DeviceTag='".mysqli_real_escape_string($iAssistDB,$row['LGTag'])."'
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -143,7 +144,7 @@ function importDevices(){
 
             // Insert/Update ComputerName
             if ($row['ComputerName'] != '') {
-                if ($row['ComputerName'] != $existingDevice['DeviceName']) {
+                if ($row['ComputerName'] != $existingEntry['DeviceName']) {
                     $sql = "UPDATE Devices SET DeviceName='".mysqli_real_escape_string($iAssistDB,$row['ComputerName'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -153,7 +154,7 @@ function importDevices(){
 
             // Insert/Update Notes
             if ($row['Notes'] != '') {
-                if ($row['Notes'] != $existingDevice['Notes']) {
+                if ($row['Notes'] != $existingEntry['Notes']) {
                     $sql = "UPDATE Devices SET Notes='".mysqli_real_escape_string($iAssistDB,$row['Notes'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -163,7 +164,7 @@ function importDevices(){
 
             // Insert/Update PurchaseDate
             if ($row['DatePurchased'] != '') {
-                if ($row['DatePurchased'] != $existingDevice['PurchaseDate']) {
+                if ($row['DatePurchased'] != $existingEntry['PurchaseDate']) {
                     $sql = "UPDATE Devices SET PurchaseDate='".$row['DatePurchased']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -173,7 +174,7 @@ function importDevices(){
 
             // Insert/Update Site
             if ($row['Site'] != '') {
-                if ($row['Site'] != $existingDevice['Site']) {
+                if ($row['Site'] != $existingEntry['Site']) {
                     $sql = "UPDATE Devices SET Site='".mysqli_real_escape_string($iAssistDB,$row['Site'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -183,7 +184,7 @@ function importDevices(){
 
             // Insert/Update Room
             if ($row['Room'] != '') {
-                if ($row['Room'] != $existingDevice['Room']) {
+                if ($row['Room'] != $existingEntry['Room']) {
                     $sql = "UPDATE Devices SET Room='".mysqli_real_escape_string($iAssistDB,$row['Room'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -193,7 +194,7 @@ function importDevices(){
 
             // Insert/Update LastUser
             if ($row['LastUser'] != '') {
-                if ($row['LastUser'] != $existingDevice['LastUser']) {
+                if ($row['LastUser'] != $existingEntry['LastUser']) {
                     $sql = "UPDATE Devices SET LastUser='".mysqli_real_escape_string($iAssistDB,$row['LastUser'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -203,7 +204,7 @@ function importDevices(){
 
             // Insert/Update LastCheckinDate
             if ($row['LastCheckInDate'] != '') {
-                if ($row['LastCheckInDate'] != $existingDevice['LastCheckInDate']) {
+                if ($row['LastCheckInDate'] != $existingEntry['LastCheckInDate']) {
                     $sql = "UPDATE Devices SET LastCheckInDate='".$row['LastCheckInDate']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -213,7 +214,7 @@ function importDevices(){
 
             // Insert/Update LastCheckInTime
             if ($row['LastCheckInTime'] != '') {
-                if ($row['LastCheckInTime'] != $existingDevice['LastCheckInTime']) {
+                if ($row['LastCheckInTime'] != $existingEntry['LastCheckInTime']) {
                     $sql = "UPDATE Devices SET LastCheckInTime='".$row['LastCheckInTime']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -223,7 +224,7 @@ function importDevices(){
 
             // Insert/Update OSVersion
             if ($row['OSVersion'] != '') {
-                if ($row['OSVersion'] != $existingDevice['OSVersion']) {
+                if ($row['OSVersion'] != $existingEntry['OSVersion']) {
                     $sql = "UPDATE Devices SET OSVersion='".mysqli_real_escape_string($iAssistDB,$row['OSVersion'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -233,7 +234,7 @@ function importDevices(){
 
             // Insert/Update InternalIP
             if ($row['InternalIP'] != '') {
-                if ($row['InternalIP'] != $existingDevice['InternalIP']) {
+                if ($row['InternalIP'] != $existingEntry['InternalIP']) {
                     $sql = "UPDATE Devices SET InternalIP='".mysqli_real_escape_string($iAssistDB,$row['InternalIP'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -243,7 +244,7 @@ function importDevices(){
 
             // Insert/Update ExternalIP
             if ($row['ExternalIP'] != '') {
-                if ($row['ExternalIP'] != $existingDevice['ExternalIP']) {
+                if ($row['ExternalIP'] != $existingEntry['ExternalIP']) {
                     $sql = "UPDATE Devices SET ExternalIP='".mysqli_real_escape_string($iAssistDB,$row['ExternalIP'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -253,7 +254,7 @@ function importDevices(){
 
             // Insert/Update DateAdded
             if ($row['DateAdded'] != '') {
-                if ($row['DateAdded'] != $existingDevice['DateAdded']) {
+                if ($row['DateAdded'] != $existingEntry['DateAdded']) {
                     $sql = "UPDATE Devices SET DateAdded='".$row['DateAdded']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -263,7 +264,7 @@ function importDevices(){
 
             // Insert/Update DateDisabled
             if ($row['DateDisabled'] != '') {
-                if ($row['DateDisabled'] != $existingDevice['DateDisabled']) {
+                if ($row['DateDisabled'] != $existingEntry['DateDisabled']) {
                     $sql = "UPDATE Devices SET DateDisabled='".$row['DateDisabled']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -273,7 +274,7 @@ function importDevices(){
 
             // Insert/Update DateDeleted
             if ($row['DateDeleted'] != '') {
-                if ($row['DateDeleted'] != $existingDevice['DateDeleted']) {
+                if ($row['DateDeleted'] != $existingEntry['DateDeleted']) {
                     $sql = "UPDATE Devices SET DateDeleted='".$row['DateDeleted']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -282,7 +283,7 @@ function importDevices(){
             }
 
             // Update Active
-            if ($row['Active'] != $existingDevice['Active']) {
+            if ($row['Active'] != $existingEntry['Active']) {
                 $sql = "UPDATE Devices SET Active=".$row['Active']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -290,7 +291,7 @@ function importDevices(){
             }
 
             // Update Deleted
-            if ($row['Active'] != $existingDevice['Active']) {
+            if ($row['Active'] != $existingEntry['Active']) {
                 $sql = "UPDATE Devices SET Active=".$row['Active']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -382,10 +383,10 @@ function importPeople(){
             
             // See if the record is already in the new database
             $sql = "SELECT * FROM People WHERE ID=".$row['ID'].";";
-            $userCheck = $iAssistDB->query($sql);
+            $dbCheck = $iAssistDB->query($sql);
             
             // Add the account if it's not found in the database
-            if ($userCheck->num_rows == 0) {
+            if ($dbCheck->num_rows == 0) {
 
                 // Create the user's record in the database 
                 $sql = "INSERT INTO People(ID,FirstName,LastName,UserName,Email,Site,
@@ -406,7 +407,7 @@ function importPeople(){
 
                 // Get the newly created person
                 $sql = "SELECT * FROM People WHERE ID=".$row['ID'].";";
-                $userCheck = $iAssistDB->query($sql);
+                $dbCheck = $iAssistDB->query($sql);
 
             }
             else {
@@ -416,10 +417,10 @@ function importPeople(){
             }
 
             // Grab the info about the person
-            $existingUser=$userCheck->fetch_assoc();
+            $existingEntry=$dbCheck->fetch_assoc();
 
             // Update FirstName
-            if ($row['FirstName'] != $existingUser['FirstName']) {
+            if ($row['FirstName'] != $existingEntry['FirstName']) {
                 $sql = "UPDATE People SET FirstName='".mysqli_real_escape_string($iAssistDB,$row['FirstName'])."'
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -427,7 +428,7 @@ function importPeople(){
             }
 
             // Update LastName
-            if ($row['LastName'] != $existingUser['LastName']) {
+            if ($row['LastName'] != $existingEntry['LastName']) {
                 $sql = "UPDATE People SET LastName='".mysqli_real_escape_string($iAssistDB,$row['LastName'])."'
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -435,7 +436,7 @@ function importPeople(){
             }
 
             // Update UserName and Email
-            if ($row['UserName'] != $existingUser['UserName']) {
+            if ($row['UserName'] != $existingEntry['UserName']) {
                 $sql = "UPDATE People SET UserName='".mysqli_real_escape_string($iAssistDB,$row['UserName'])."'
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -447,7 +448,7 @@ function importPeople(){
 
             // Insert/Update Password
             if ($row['Pword'] != '') {
-                if ($row['Pword'] != $existingUser['Pword']) {
+                if ($row['Pword'] != $existingEntry['Pword']) {
                     $sql = "UPDATE People SET Pword='".mysqli_real_escape_string($iAssistDB,$row['Pword'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -457,7 +458,7 @@ function importPeople(){
 
             // Update Site
             if ($row['Site'] != '') {
-                if ($row['Site'] != $existingUser['Site']) {
+                if ($row['Site'] != $existingEntry['Site']) {
                     $sql = "UPDATE People SET Site='".mysqli_real_escape_string($iAssistDB,$row['Site'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -467,7 +468,7 @@ function importPeople(){
 
             // Insert/Update Phone
             if ($row['PhoneNumber'] != NULL) {
-                if ($row['PhoneNumber'] != $existingUser['Phone']) {
+                if ($row['PhoneNumber'] != $existingEntry['Phone']) {
                     $sql = "UPDATE People SET Phone='".mysqli_real_escape_string($iAssistDB,$row['PhoneNumber'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -477,7 +478,7 @@ function importPeople(){
 
             // Insert/Update Room
             if ($row['RoomNumber'] != NULL) {
-                if ($row['RoomNumber'] != $existingUser['Room']) {
+                if ($row['RoomNumber'] != $existingEntry['Room']) {
                     $sql = "UPDATE People SET Room='".mysqli_real_escape_string($iAssistDB,$row['RoomNumber'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -487,7 +488,7 @@ function importPeople(){
 
             // Insert/Update Description
             if ($row['Description'] != NULL) {
-                if ($row['Description'] != $existingUser['Description']) {
+                if ($row['Description'] != $existingEntry['Description']) {
                     $sql = "UPDATE People SET Description='".mysqli_real_escape_string($iAssistDB,$row['Description'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -497,7 +498,7 @@ function importPeople(){
 
             // Insert/Update Notes
             if ($row['Notes'] != NULL) {
-                if ($row['Notes'] != $existingUser['Notes']) {
+                if ($row['Notes'] != $existingEntry['Notes']) {
                     $sql = "UPDATE People SET Notes='".mysqli_real_escape_string($iAssistDB,$row['Notes'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -507,7 +508,7 @@ function importPeople(){
 
             // Insert/Update Role
             if ($row['ClassOf'] != NULL) {
-                if ($row['ClassOf'] != $existingUser['Role']) {
+                if ($row['ClassOf'] != $existingEntry['Role']) {
                     $sql = "UPDATE People SET Role='".mysqli_real_escape_string($iAssistDB,$row['ClassOf'])."'
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -517,7 +518,7 @@ function importPeople(){
 
             // Update PhotoID
             if ($row['StudentID'] != NULL) {
-                if ($row['StudentID'] != $existingUser['PhotoID']) {
+                if ($row['StudentID'] != $existingEntry['PhotoID']) {
                     $sql = "UPDATE People SET Role='".mysqli_real_escape_string($iAssistDB,$row['PhotoID'])."'
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -527,7 +528,7 @@ function importPeople(){
 
             // Insert/Update DOB
             if ($row['Birthday'] != '') {
-                if ($row['Birthday'] != $existingUser['DOB']) {
+                if ($row['Birthday'] != $existingEntry['DOB']) {
                     $sql = "UPDATE People SET DOB='".$row['Birthday']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -537,7 +538,7 @@ function importPeople(){
 
             // Insert/Update HomeRoom
             if ($row['HomeRoom'] != NULL) {
-                if ($row['HomeRoom'] != $existingUser['HomeRoom']) {
+                if ($row['HomeRoom'] != $existingEntry['HomeRoom']) {
                     $sql = "UPDATE People SET HomeRoom='".mysqli_real_escape_string($iAssistDB,$row['HomeRoom'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -547,7 +548,7 @@ function importPeople(){
 
             // Insert/Update HomeRoomEmail
             if ($row['HomeRoomEmail'] != NULL) {
-                if ($row['HomeRoomEmail'] != $existingUser['HomeRoomEmail']) {
+                if ($row['HomeRoomEmail'] != $existingEntry['HomeRoomEmail']) {
                     $sql = "UPDATE People SET HomeRoomEmail='".mysqli_real_escape_string($iAssistDB,$row['HomeRoomEmail'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -557,7 +558,7 @@ function importPeople(){
 
              // Insert/Update LastExternalCheckIn 
              if ($row['LastExternalCheckIn'] != NULL) {
-                if ($row['LastExternalCheckIn'] != $existingUser['LastExternalCheckIn']) {
+                if ($row['LastExternalCheckIn'] != $existingEntry['LastExternalCheckIn']) {
                     $sql = "UPDATE People SET LastExternalCheckIn='".$row['LastExternalCheckIn']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -567,7 +568,7 @@ function importPeople(){
 
             // Insert/Update LastInternalCheckIn
             if ($row['LastInternalCheckIn'] != NULL) {
-                if ($row['LastExternalCheckIn'] != $existingUser['LastExternalCheckIn']) {
+                if ($row['LastExternalCheckIn'] != $existingEntry['LastExternalCheckIn']) {
                     $sql = "UPDATE People SET LastInternalCheckIn='".$row['LastInternalCheckIn']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -577,7 +578,7 @@ function importPeople(){
 
             // Insert/Update InternetAccess
             if ($row['InternetAccess'] != '') {
-                if ($row['InternetAccess'] != $existingUser['InternetAccess']) {
+                if ($row['InternetAccess'] != $existingEntry['InternetAccess']) {
                     $sql = "UPDATE People SET InternetAccess='".mysqli_real_escape_string($iAssistDB,$row['InternetAccess'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -586,7 +587,7 @@ function importPeople(){
             }
 
             // Update AUP
-            if ($row['AUP'] != $existingUser['AUP']) {
+            if ($row['AUP'] != $existingEntry['AUP']) {
                 $sql = "UPDATE People SET AUP=".$row['AUP']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -595,7 +596,7 @@ function importPeople(){
 
             // Insert/Update DateAdded
             if ($row['DateAdded'] != NULL) {
-                if ($row['DateAdded'] != $existingUser['DateAdded']) {
+                if ($row['DateAdded'] != $existingEntry['DateAdded']) {
                     $sql = "UPDATE People SET DateAdded='".$row['DateAdded']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -605,7 +606,7 @@ function importPeople(){
 
             // Insert/Update DateDisabled
             if ($row['DateDisabled'] != NULL) {
-                if ($row['DateDisabled'] != $existingUser['DateDisabled']) {
+                if ($row['DateDisabled'] != $existingEntry['DateDisabled']) {
                     $sql = "UPDATE People SET DateDisabled='".$row['DateDisabled']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -615,7 +616,7 @@ function importPeople(){
 
             // Insert/Update DateDeleted
             if ($row['DateDeleted'] != NULL) {
-                if ($row['DateDeleted'] != $existingUser['DateDeleted']) {
+                if ($row['DateDeleted'] != $existingEntry['DateDeleted']) {
                     $sql = "UPDATE People SET DateDeleted='".$row['DateDeleted']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -624,7 +625,7 @@ function importPeople(){
             }
 
             // Update Active
-            if ($row['Active'] != $existingUser['Active']) {
+            if ($row['Active'] != $existingEntry['Active']) {
                 $sql = "UPDATE People SET Active=".$row['Active']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -632,7 +633,7 @@ function importPeople(){
             }
 
             // Update Deleted
-            if ($row['Active'] != $existingUser['Active']) {
+            if ($row['Active'] != $existingEntry['Active']) {
                 $sql = "UPDATE People SET Active=".$row['Active']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -714,10 +715,10 @@ function importAssignments(){
 
             // See if the record is already in the new database
             $sql = "SELECT * FROM Assignments WHERE ID=".$row['ID'].";";
-            $assignmentCheck = $iAssistDB->query($sql);
+            $dbCheck = $iAssistDB->query($sql);
 
             // Add the record if it's not found in the database
-            if ($assignmentCheck->num_rows == 0) {
+            if ($dbCheck->num_rows == 0) {
 
                 // Create the devices's record in the database 
                 $sql = "INSERT INTO Assignments(ID,DeviceTag,DateIssued,TimeIssued,AssignedTo,IssuedBy,Active)
@@ -733,7 +734,7 @@ function importAssignments(){
 
                 // Get the newly created assignment
                 $sql = "SELECT * FROM Assignments WHERE ID=".$row['ID'].";";
-                $assignmentCheck = $iAssistDB->query($sql);
+                $dbCheck = $iAssistDB->query($sql);
             }
             else {
 
@@ -742,10 +743,10 @@ function importAssignments(){
             }
 
             // Grab the info about the Assignment
-            $existingAssignment=$assignmentCheck->fetch_assoc();
+            $existingEntry=$dbCheck->fetch_assoc();
 
             // Update DeviceTag
-            if ($row['LGTag'] != $existingAssignment['DeviceTag']) {
+            if ($row['LGTag'] != $existingEntry['DeviceTag']) {
                 $sql = "UPDATE Assignments SET DeviceTag='".mysqli_real_escape_string($iAssistDB,$row['LGTag'])."'
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -754,7 +755,7 @@ function importAssignments(){
 
             // Insert/Update DateReturned
             if ($row['DateReturned'] != '') {
-                if ($row['DateReturned'] != $existingAssignment['DateReturned']) {
+                if ($row['DateReturned'] != $existingEntry['DateReturned']) {
                     $sql = "UPDATE Assignments SET DateReturned='".$row['DateReturned']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -764,7 +765,7 @@ function importAssignments(){
 
             // Insert/Update TimeReturned
             if ($row['TimeReturned'] != '') {
-                if ($row['TimeReturned'] != $existingAssignment['TimeReturned']) {
+                if ($row['TimeReturned'] != $existingEntry['TimeReturned']) {
                     $sql = "UPDATE Assignments SET TimeReturned='".$row['TimeReturned']."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -774,7 +775,7 @@ function importAssignments(){
 
             // Insert/Update ReturnedBy
             if ($row['ReturnedBy'] != '') {
-                if ($row['ReturnedBy'] != $existingAssignment['ReturnedBy']) {
+                if ($row['ReturnedBy'] != $existingEntry['ReturnedBy']) {
                     $sql = "UPDATE Assignments SET ReturnedBy='".mysqli_real_escape_string($iAssistDB,$row['ReturnedBy'])."' 
                         WHERE ID=".$row['ID'].";";
                     $iAssistDB->query($sql);
@@ -783,7 +784,7 @@ function importAssignments(){
             }
 
             // Update Active
-            if ($row['Active'] != $existingAssignment['Active']) {
+            if ($row['Active'] != $existingEntry['Active']) {
                 $sql = "UPDATE Assignments SET Active=".$row['Active']."
                     WHERE ID=".$row['ID'].";";
                 $iAssistDB->query($sql);
@@ -801,6 +802,79 @@ function importAssignments(){
     } 
     else {
         echo "   - No assignments found to import\n";
+    }
+    echo "-----\n";
+    echo "\n";
+}
+
+function importCountHistory(){
+
+    // Import CountHistory from the old Inventory database
+    
+    // Read in the config file
+    $configFile="../../config.ini";
+    $config = parse_ini_file($configFile);
+
+    // Connect to the databases
+    $inventoryDB = inventory_connect();
+    $iAssistDB = db_connect();
+
+    // Exit the function if one of the databases isn't found
+    if($inventoryDB == FALSE) {echo "Inventory database not found, cannot import devices...\n";return;}
+    if($iAssistDB == FALSE) {echo "iAssist database not found, cannot import devices...\n";return;}
+
+    // Initialize variables
+    $completedCount = 0;
+    $skippedCount = 0;
+
+    echo "Importing Count History....\n";
+
+    // Grab all the records from the old database
+    $sql = "SELECT * FROM CountHistory;";
+    $results = $inventoryDB->query($sql);
+
+    // Make sure data was found in the old database before moving forward
+    if ($results->num_rows > 0) {
+
+        // Loop through the returned records from the old database
+        while ($row=$results->fetch_assoc()) {
+
+            // See if the record is already in the new database
+            $sql = "SELECT * FROM CountHistory WHERE ID=".$row['ID'].";";
+            $dbCheck = $iAssistDB->query($sql);
+
+            // Add the record if it's not found in the database
+            if ($dbCheck->num_rows == 0) {
+
+                
+                // If the role is TotalCount change it to 0 since it needs to be an integer
+                if ($row['Role'] == "TotalCount") {
+                    $role = 0;
+                }
+                else {
+                    $role = $row['Role'];
+                }
+
+                // Create the devices's record in the database 
+                $sql = "INSERT INTO CountHistory(ID,Role,RecordedDate,StudentCount)
+                    Values (".$row['ID'].",".
+                    $role.",'".
+                    $row['RecordedDate']."',".
+                    $row['StudentCount'].");";
+                $iAssistDB->query($sql);
+                $completedCount++;
+            }
+            else {
+
+                // Count the record if it was skipped meaning it was already in the database
+                $skippedCount++;
+            }
+        }
+        echo "   - Count histories imported: ".$completedCount."\n";
+        echo "   - Count histories skipped: ".$skippedCount."\n";
+    } 
+    else {
+        echo "   - No count histories found to import\n";
     }
     echo "-----\n";
     echo "\n";

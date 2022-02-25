@@ -52,19 +52,9 @@ function getActiveDeviceCount() {
 }
 
 function getStudentsPerGrade(){
-    // $studentGradeArray = ["2022" => 67,
-    // "2023" => 56,
-    // "2024" => 63,
-    // "2025" => 51,
-    // "2026" => 93,
-    // "2027" => 43,
-    // "2028" => 53,
-    // "2029" => 42,
-    // "2030" => 46,
-    // "2031" => 34,
-    // "2032" => 59,
-    // "2033" => 99,
-    // "2034" => 13];
+
+    // Input: None
+    // Output: Associative array ['Role','Count']
 
     // Initialize variables
     $studentGradeArray = [];
@@ -76,17 +66,43 @@ function getStudentsPerGrade(){
     $sql = "SELECT Role,Count(ID) AS CountOfStudents FROM People WHERE Role>=2000 AND Active GROUP BY Role;";
     $results = $connection->query($sql);
 
-    // Return the data if found, otherwise return 0
+    // If data is returned loop through it
     if ($results->num_rows > 0) {
         
-        // Loop through the returned records from the old database
+        // Add data to the array
         while ($row=$results->fetch_assoc()) {
             $studentGradeArray += [strval($row['Role']) => $row['CountOfStudents']];
         }
-
     } 
 
     return $studentGradeArray;
+}
+
+function getCountHistory($role){
+
+    // Input: Integer representing the role, where 0 is for total student count.
+    // Output: Associative array ['Date','Count']
+
+    // Initialize variables
+    $countHistoryArray = [];
+
+    // Connect to the database
+    $connection = db_connect();
+
+    // Get the count of students per grade
+    $sql = "SELECT * FROM CountHistory WHERE Role=".$role.";";
+    $results = $connection->query($sql);
+
+    // If data is returned loop through it
+    if ($results->num_rows > 0) {
+        
+        // Add data to the array
+        while ($row=$results->fetch_assoc()) {
+            $countHistoryArray += [strval($row['RecordedDate']) => $row['StudentCount']];
+        }
+    } 
+
+    return $countHistoryArray;
 }
 
 function getGrade($year){
