@@ -102,16 +102,16 @@ function getGrade($year){
       $classOf="Kindergarten";
     }
     elseif ($grade == 1){
-      $classOf=$grade."st";
+      $classOf=$grade."st Grade";
     }
     elseif ($grade == 2){
-      $classOf=$grade."nd";
+      $classOf=$grade."nd Grade";
     }
     elseif ($grade == 3){
-      $classOf=$grade."rd";
+      $classOf=$grade."rd Grade";
     }
     else{
-      $classOf=$grade."th";
+      $classOf=$grade."th Grade";
     }
     return $classOf;
   }
