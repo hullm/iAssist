@@ -7,6 +7,7 @@ $config = parse_ini_file($configFile);
 importPeople();
 importDevices();
 importAssignments();
+importEvents();
 importCountHistory();
 
 function db_connect() {
@@ -802,6 +803,223 @@ function importAssignments(){
     } 
     else {
         echo "   - No assignments found to import\n";
+    }
+    echo "-----\n";
+    echo "\n";
+}
+
+function importEvents(){
+
+    // Import Events from the old Inventory database
+    
+    // Read in the config file
+    $configFile="../../config.ini";
+    $config = parse_ini_file($configFile);
+
+    // Connect to the databases
+    $inventoryDB = inventory_connect();
+    $iAssistDB = db_connect();
+
+    // Exit the function if one of the databases isn't found
+    if($inventoryDB == FALSE) {echo "Inventory database not found, cannot import devices...\n";return;}
+    if($iAssistDB == FALSE) {echo "iAssist database not found, cannot import devices...\n";return;}
+
+    // Initialize variables
+    $completedCount = 0;
+    $skippedCount = 0;
+    $deviceTagCount = 0;
+    $userIDCount = 0;
+    $typeCount = 0;
+    $siteCount = 0;
+    $notesCount = 0;
+    $categoryCount = 0;
+    $enteredByCount = 0;
+    $warrantyCount = 0;
+    $completedByCount = 0;
+    $lastUpdatedDateCount = 0;
+    $lastUpdatedTimeCount = 0;
+    $statusCount = 0;
+
+    echo "Importing Events....\n";
+
+    // Grab all the records from the old database
+    $sql = "SELECT * FROM Events;";
+    $results = $inventoryDB->query($sql);
+
+    // Make sure data was found in the old database before moving forward
+    if ($results->num_rows > 0) {
+
+        // Loop through the returned records from the old database
+        while ($row=$results->fetch_assoc()) {
+
+            // See if the record is already in the new database
+            $sql = "SELECT * FROM Events WHERE ID=".$row['ID'].";";
+            $dbCheck = $iAssistDB->query($sql);
+
+            // Add the record if it's not found in the database
+            if ($dbCheck->num_rows == 0) {
+
+                // Create the devices's record in the database 
+                $sql = "INSERT INTO Events(ID,DeviceTag,UserID,Type,Site,Notes,
+                    SubmitDate,SubmitTime,Category,EnteredBy,Warranty,Deleted)
+                    Values (".$row['ID'].",'".
+                    mysqli_real_escape_string($iAssistDB,$row['LGTag'])."',".
+                    $row['UserID'].",'".
+                    mysqli_real_escape_string($iAssistDB,$row['Type'])."','".
+                    mysqli_real_escape_string($iAssistDB,$row['Site'])."','".
+                    mysqli_real_escape_string($iAssistDB,$row['Notes'])."','".
+                    $row['EventDate']."','".
+                    $row['EventTime']."','".
+                    mysqli_real_escape_string($iAssistDB,$row['Category'])."','".
+                    mysqli_real_escape_string($iAssistDB,$row['EnteredBy'])."',".
+                    $row['Warranty'].",".
+                    $row['Deleted'].");";
+                $iAssistDB->query($sql);
+                $completedCount++;
+
+                // Get the newly created event
+                $sql = "SELECT * FROM Events WHERE ID=".$row['ID'].";";
+                $dbCheck = $iAssistDB->query($sql);
+
+            }
+            else {
+
+                // Count the record if it was skipped meaning it was already in the database
+                $skippedCount++;
+            }
+
+            // Grab the info about the Assignment
+            $existingEntry=$dbCheck->fetch_assoc();
+
+            // Update DeviceTag
+            if ($row['LGTag'] != $existingEntry['DeviceTag']) {
+                $sql = "UPDATE events SET DeviceTag='".mysqli_real_escape_string($iAssistDB,$row['LGTag'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $deviceTagCount++;
+            }
+
+            // Update UserID
+            if ($row['UserID'] != $existingEntry['UserID']) {
+                $sql = "UPDATE events SET UserID=".$row['UserID']."
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $userIDCount++;
+            }
+
+            // Update Type
+            if ($row['Type'] != $existingEntry['Type']) {
+                $sql = "UPDATE events SET Type='".mysqli_real_escape_string($iAssistDB,$row['Type'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $typeCount++;
+            }
+
+            // Update Site
+            if ($row['Site'] != $existingEntry['Site']) {
+                $sql = "UPDATE events SET Site='".mysqli_real_escape_string($iAssistDB,$row['Site'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $siteCount++;
+            }
+
+            // Update Notes
+            if ($row['Notes'] != $existingEntry['Notes']) {
+                $sql = "UPDATE events SET Notes='".mysqli_real_escape_string($iAssistDB,$row['Notes'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $notesCount++;
+            }
+
+            // Update Category
+            if ($row['Category'] != $existingEntry['Category']) {
+                $sql = "UPDATE events SET Category='".mysqli_real_escape_string($iAssistDB,$row['Category'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $categoryCount++;
+            }
+
+            // Update EnteredBy
+            if ($row['EnteredBy'] != $existingEntry['EnteredBy']) {
+                $sql = "UPDATE events SET EnteredBy='".mysqli_real_escape_string($iAssistDB,$row['EnteredBy'])."'
+                    WHERE ID=".$row['ID'].";";
+                $iAssistDB->query($sql);
+                $enteredByCount++;
+            }
+
+            // Insert/Update CompletedBy
+            if ($row['CompletedBy'] != '') {
+                if ($row['CompletedBy'] != $existingEntry['CompletedBy']) {
+                    $sql = "UPDATE Events SET CompletedBy='".mysqli_real_escape_string($iAssistDB,$row['CompletedBy'])."' 
+                        WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $completedByCount++;
+                }
+            }
+
+            // Update Warranty
+            if ($row['Warranty'] != '') {
+                if ($row['Warranty'] != $existingEntry['Warranty']) {
+                    $sql = "UPDATE Events SET Warranty=".$row['Warranty']."' 
+                        WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $warrantyCount++;
+                }
+            }
+
+            // Insert/Update LastUpdatedDate
+            if ($row['ResolvedDate'] != '') {
+                if ($row['ResolvedDate'] != $existingEntry['LastUpdatedDate']) {
+                    $sql = "UPDATE Events SET LastUpdatedDate='".$row['ResolvedDate']."' 
+                        WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $lastUpdatedDateCount++;
+                }
+            }
+
+            // Insert/Update LastUpdatedTime
+            if ($row['ResolvedTime'] != '') {
+                if ($row['ResolvedTime'] != $existingEntry['LastUpdatedTime']) {
+                    $sql = "UPDATE Events SET LastUpdatedTime='".$row['ResolvedTime']."' 
+                        WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $lastUpdatedTimeCount++;
+                }
+            }
+
+            // Insert/Update Status
+            if ($row['Resolved']) {
+                if ($existingEntry['Status'] != "Complete") {
+                    $sql = "UPDATE Events SET Status='Complete' WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $statusCount++;
+                }
+            }
+            else {
+                if ($existingEntry['Status'] != "In Progress") {
+                    $sql = "UPDATE Events SET Status='In Progress' WHERE ID=".$row['ID'].";";
+                    $iAssistDB->query($sql);
+                    $statusCount++;
+                }
+            }
+
+        }
+        echo "   - Events imported: ".$completedCount."\n";
+        echo "   - Events skipped: ".$skippedCount."\n";
+        echo "   - Device tags updated: ".$deviceTagCount."\n";
+        echo "   - UserIDs updated: ".$userIDCount."\n";
+        echo "   - Types updated: ".$typeCount."\n";
+        echo "   - Sites updated: ".$siteCount."\n";
+        echo "   - Categories updated: ".$categoryCount."\n";
+        echo "   - EnteredBys updated: ".$enteredByCount."\n";
+        echo "   - Warranties updated: ".$warrantyCount."\n";
+        echo "   - CompletedBys added/updated: ".$completedByCount."\n";
+        echo "   - ResolvedDates added/updated: ".$lastUpdatedDateCount."\n";
+        echo "   - ResolvedTimes added/updated: ".$lastUpdatedTimeCount."\n";
+        echo "   - Statuses added/updated: ".$statusCount."\n";
+    } 
+    else {
+        echo "   - No events found to import\n";
     }
     echo "-----\n";
     echo "\n";
