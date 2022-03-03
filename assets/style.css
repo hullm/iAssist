@@ -37,6 +37,10 @@ label {
   padding-bottom: 5px;
 }
 
+.row{
+  padding-bottom: 15px;
+}
+
 .center {
   margin: 0;
   position: absolute;
@@ -127,14 +131,43 @@ label {
   margin: 0px auto 15px;
 }
 .alerts-title{
-  color: #F26227;
+  color: #7C0B2B;
+}
+.card{
+  /* max-height: 60vh; */
+  height: 100%;
+  border-radius: 8px;
+  border: 0px;
+  box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+  /* overflow-y: auto; */
 }
 .card-title{
   color: #637484;
+  font-size: 18px;
+  padding: 10px;
+  font-weight: bold;
 }
 h3{
   color: #637484;
 }
 .light{
   font-weight: 200;
+}
+
+.progress {
+  height: 5px;
+  margin-bottom: 5px;
+}
+
+.bar-info{
+  color: #637484;
+  font-size: 14px;
+}
+.progress-row{
+  padding-bottom: 0px;
+  padding-top: 10px;
+}
+
+.progress-bar{
+  background-color: rgba(242, 98, 39, 0.9);
 }

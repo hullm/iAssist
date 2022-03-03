@@ -23,12 +23,15 @@
 }
 
 
-.btn-toggle {
-  display: inline-flex;
-  align-items: center;
+.sidebar-btn{
   padding: .75rem .5rem;
   font-weight: 600;
   color: rgba(0, 0, 0, .65);
+}
+.btn-toggle {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
   background-color: transparent;
   border: 0;
 }
@@ -36,12 +39,12 @@
 .btn-toggle:hover,
 .btn-toggle:focus {
   color: rgba(0, 0, 0, .85);
-  background-color: #d2f4ea;
+  background-color: #35B2E6;
 }
 
 .btn:focus,
 .btn:hover {
-  background-color: #d2f4ea;
+  background-color: #35B2E6;
 }
 
 .btn-toggle::after {
@@ -73,7 +76,7 @@
 
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-  background-color: #d2f4ea;
+  background-color: #35B2E6;
 }
 
 .scrollarea {

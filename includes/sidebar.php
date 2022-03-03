@@ -25,7 +25,7 @@
                     <hr>
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
-                            <button class="btn align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                            <button class="btn sidebar-btn align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#speedometer2" />
                                 </svg>
@@ -33,7 +33,7 @@
                             </button>
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#helpdesk-collapse" aria-expanded="false">
+                            <button class="btn sidebar-btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#helpdesk-collapse" aria-expanded="false">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#person-workspace" />
                                 </svg>
@@ -49,7 +49,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#inventory-collapse" aria-expanded="false">
+                            <button class="btn sidebar-btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#inventory-collapse" aria-expanded="false">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#table" />
                                 </svg>
@@ -65,9 +65,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#timesheet-collapse" aria-expanded="false">
+                            <button class="btn sidebar-btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#timesheet-collapse" aria-expanded="false">
                                 <svg class="bi me-2" width="16" height="16">
-                                    <use xlink:href="#grid" />
+                                    <use xlink:href="#clock" />
                                 </svg>
                                 Timesheet
                             </button>
@@ -81,7 +81,23 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <button class="btn align-items-center rounded collapsed">
+                            <button class="btn sidebar-btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#software-collapse" aria-expanded="false">
+                                <svg class="bi me-2" width="16" height="16">
+                                    <use xlink:href="#grid" />
+                                </svg>
+                                Apps
+                            </button>
+                            <div class="collapse" id="software-collapse">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <li><a href="#" class="link-dark rounded"> Check In</a></li>
+                                    <li><a href="#" class="link-dark rounded"> Check Out</a></li>
+                                    <li><a href="#" class="link-dark rounded"> View Map</a></li>
+                                    <li><a href="#" class="link-dark rounded"> Reports</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <button class="btn sidebar-btn align-items-center rounded collapsed">
                                 <svg class="bi me-2" width="16" height="16">
                                     <use xlink:href="#gear" />
                                 </svg>
