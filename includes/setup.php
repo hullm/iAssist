@@ -127,8 +127,7 @@ if ($connection->query($sql) === TRUE) {
 // Create the Tickets table
 $sql = "CREATE TABLE `Tickets` (
     `ID` INTEGER NOT NULL AUTO_INCREMENT, 
-    `UserID` VARCHAR(50),  
-    `DeviceTag` VARCHAR(255),
+    `UserID` INTEGER DEFAULT 0, 
     `Site` VARCHAR(50), 
     `Problem` LONGTEXT, 
     `Notes` LONGTEXT,
@@ -140,8 +139,8 @@ $sql = "CREATE TABLE `Tickets` (
     `Category` VARCHAR(50), 
     `Tech` VARCHAR(50), 
     `OpenTime` VARCHAR(50), 
-    `PhoneNumber` VARCHAR(255),
-    `RoomNumber` VARCHAR(255), 
+    `PhoneNumber` VARCHAR(50),
+    `RoomNumber` VARCHAR(50), 
     `DateDeleted` DATETIME,
     `Deleted` TINYINT(1), 
     INDEX (`ID`), 
@@ -182,7 +181,59 @@ if ($connection->query($sql) === TRUE) {
     echo "<div>Events table already exists...</div>";
 }
 
-// Create the Events table
+$connection->query("DROP TABLE IF EXISTS `Alerts`;");
+
+// Create the Alerts table
+$sql = "CREATE TABLE `Alerts` (
+    `ID` INTEGER NOT NULL AUTO_INCREMENT, 
+    `AlertName` VARCHAR(255), 
+    `ForeignTable` VARCHAR(255), 
+    `ForeignID` INTEGER DEFAULT 0, 
+    `Description` VARCHAR(255), 
+    `UserID` INTEGER DEFAULT 0, 
+    `Active` TINYINT(1), 
+    PRIMARY KEY (`ID`)
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+
+if ($connection->query($sql) === TRUE) {
+    echo "<div>Alerts table created...</div>";
+} else {
+    echo "<div>Alerts table already exists...</div>";
+}
+
+// Add sample events 1065-Matt, 1401-Dane
+$sql = "INSERT INTO Alerts (AlertName,ForeignTable,ForeignID,Description,UserID,Active)
+    Values ('Repair older than 90 days','Events',1389,'',1065,true)";
+    $connection->query($sql);
+$sql = "INSERT INTO Alerts (AlertName,ForeignTable,ForeignID,Description,UserID,Active)
+    Values ('Repair older than 90 days','Events',1389,'',1401,true)";
+    $connection->query($sql);
+$sql = "INSERT INTO Alerts (AlertName,ForeignTable,ForeignID,Description,UserID,Active)
+    Values ('Repair older than 90 days','Events',1509,'',1065,true)";
+    $connection->query($sql);
+$sql = "INSERT INTO Alerts (AlertName,ForeignTable,ForeignID,Description,UserID,Active)
+    Values ('Repair older than 90 days','Events',1509,'',1401,true)";
+    $connection->query($sql);
+
+// Create the AlertDefinitions table
+$sql = "CREATE TABLE `AlertDefinitions` (
+    `ID` INTEGER NOT NULL AUTO_INCREMENT, 
+    `AlertName` VARCHAR(255), 
+    `ForeignTable` VARCHAR(255), 
+    `ForeignID` INTEGER DEFAULT 0, 
+    `Description` VARCHAR(255), 
+    `UserID` INTEGER DEFAULT 0, 
+    `Active` TINYINT(1), 
+    PRIMARY KEY (`ID`)
+    ) ENGINE=myisam DEFAULT CHARSET=utf8;";
+
+if ($connection->query($sql) === TRUE) {
+    echo "<div>AlertDefinitions table created...</div>";
+} else {
+    echo "<div>AlertDefinitions table already exists...</div>";
+}
+
+// Create the CountHistory table
 $sql = "CREATE TABLE `CountHistory` (
     `ID` INTEGER NOT NULL AUTO_INCREMENT, 
     `Role` INTEGER DEFAULT 0, 
