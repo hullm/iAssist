@@ -1,5 +1,4 @@
 <?php
-$studentGradeArray = getStudentsPerGrade();
 include 'includes/charts.php';
 ?>
 <div class="main">
@@ -39,8 +38,8 @@ include 'includes/charts.php';
                 <div class="card-body">
                     <h5 class="card-title">Alerts</h5>
                     <hr>
-                    <h6 class="alerts-title"><i class="bi bi-tools"></i> Repairs</h6>
-                    <p class="card-text"> Jaime really is a buttface</p>
+                    <h6 class="alerts-title"><i class="bi bi-apple"></i>Apple Repairs</h6>
+                    <p class="card-text"> There are currently 7 devices out for repair.</p>
                     <hr>
                 </div>
             </div>
@@ -52,7 +51,6 @@ include 'includes/charts.php';
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Class Size History</h5>
-                    <hr>
                     <div>
                         <canvas id="classSizeHistoryChart"></canvas>
                     </div>

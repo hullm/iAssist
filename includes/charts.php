@@ -1,17 +1,29 @@
 <script>
-    const colors = [
-        '#35b2e6',
-        '#00bcdd',
-        '#00c3c4',
-        '#00c89d',
-        '#4cc86e',
-        '#8ec43d',
-        '#c7b901',
-        '#ffa600',
-    ];
+    <?php $colors = [
+        "#fd7f6f", 
+        "#7eb0d5", 
+        "#b2e061", 
+        "#bd7ebe", 
+        "#ffb55a", 
+        "#ffee65", 
+        "#beb9db", 
+        "#fdcce5", 
+        "#8bd3c7",
+        "#ef9b20", 
+        "#edbf33", 
+        "#ede15b", 
+        "#bdcf32"
+        ];
+    // $test = getCountHistory(2033);
+    // foreach ($test as $key => $value){
+    //     echo $key."=>".$value." ";
+    // }
+    ?>
+
     function studentsPerGradeChart() {
         const labels = [
             <?php
+            $studentGradeArray = getStudentsPerGrade();
             foreach ($studentGradeArray as $key => $value) {
                 echo "'" . getGrade($key) . "'";
                 // echo "$key";
@@ -119,26 +131,30 @@
     function classSizeHistoryChart() {
         const labels = [
             // "2015-03-15T13:03:00Z", "2015-03-25T13:02:00Z", "2015-04-25T14:12:00Z",
-            "2016-09-01 00:00:00"
+            // "2016-09-01 00:00:00"
         ];
         const data = {
             labels: labels,
             datasets: [
-            {
-                label: 'Class of 2022',
-                data: [{
-                    x: '2016-09-01 00:00:00',
-                    y: 78,},{
-                    },{
-                    x: '2018-09-01',
-                    y: 75,}  
+                <?php
+                for ($i = 0; $i <= 5; $i++) {
+                    $countHistoryArray = getCountHistory(date("Y") + $i);
+                ?> {
+                        label: 'Class of <?php echo date("Y") + $i; ?>',
+                        borderColor: <?php echo "'" . $colors[$i] . "'"; ?>,
+                        backgroundColor: <?php echo "'" . $colors[$i] . "'"; ?>,
+                        data: [
+                            <?php
+                            foreach ($countHistoryArray as $date => $value) { ?> {
+                                    x: <?php echo "'" . $date . "'"; ?>,
+                                    y: <?php echo $value; ?>
+                                },
+                            <?php } ?>
+                        ],},
+                    <?php } ?>
+                    
                 ],
-                borderColor: colors[0],
-                backgroundColor: colors[0],
-            },
-            
-        ]
-        }
+        };
         const config = {
             type: 'line',
             data: data,
@@ -146,17 +162,20 @@
                 responsive: true,
                 stacked: false,
                 scales: {
-                    x:{
+                    x: {
                         type: 'time',
                         time: {
                             format: 'yyyy-MM-dd',
                             tooltipFormat: 'yyyy-MM-dd',
                             // parser: 'yyyy-MM-dd'
                         },
-                        title:{
+                        title: {
                             display: true,
                             text: 'Date',
                         },
+                    },
+                    y: {
+                        min: 30,
                     },
                 },
             },
